@@ -50,11 +50,11 @@ Next:
 
 
 	mov word ptr es:[int9_vect], offset New09	; put the adress of the new handler 
-	mov word ptr es:[int28_vect], offset New28
+	;mov word ptr es:[int28_vect], offset New28
 
 	mov ax, cs
 	mov word ptr es:[int9_vect+2], ax
-	mov word ptr es:[int28_vect+2], ax
+	;mov word ptr es:[int28_vect+2], ax
 	sti
 
 	mov ax, 3100h					;31th function in ah
@@ -72,7 +72,7 @@ Next:
 
 New09 proc
 
-	push ax bx cx dx di es si bp ds
+	push ax bx cx dx es ds si di bp
 
 	mov ax, cs
 	mov es, ax
@@ -85,7 +85,6 @@ New09 proc
 	pushf
 	call dword ptr cs:[inter09]
 
-	;cli
 	pop bp di si ds es dx cx bx ax
 
 	mov ah, 01h
@@ -106,8 +105,7 @@ New09 proc
 	call Printf
 
 
-	pop ds bp si es di dx cx bx ax
-	;sti
+	pop bp di si ds es dx cx bx ax
 
 	iret
 	;ret
@@ -115,26 +113,22 @@ New09 proc
 
 
 New28 proc
- 
-COMMENT ^
-cli
-push ax bx cx dx es di si
 
-cmp byte ptr buff_ptr, 0
-jbe @@Next
+;push ax bx cx dx es di si
+
+;cmp byte ptr buff_ptr, 0
+;jbe @@Next
 
 ;call Write_File
 
-@@Next:
-pop si di es dx cx bx ax
-sti
-^
+;@@Next:
+;pop si di es dx cx bx ax
+
 push ax bx cx dx es di si
 pushf
 call dword ptr cs:[inter28]
 
 pop si di es dx cx bx ax
-
 
 iret
 endp
